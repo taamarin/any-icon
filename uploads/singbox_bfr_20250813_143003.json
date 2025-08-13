@@ -1,0 +1,116 @@
+{
+  "log": {
+    "level": "panic",
+    "output": "sing-box.log",
+    "timestamp": true
+  },
+  "dns": {
+    "servers": [
+      {
+        "type": "tls",
+        "tag": "Google",
+        "detour": "SING",
+        "server": "8.8.8.8"
+      },
+      {
+        "type": "udp",
+        "tag": "DNS-PROVIDER",
+        "server": "172.66.0.157"
+      }
+    ],
+    "rules": [],
+    "strategy": "ipv4_only",
+    "independent_cache": false
+  },
+  "inbounds": [
+    {
+      "type": "tproxy",
+      "tag": "tproxy-in",
+      "listen": "::",
+      "listen_port": 9898
+    }
+  ],
+  "outbounds": [
+    {
+      "type": "direct",
+      "tag": "direct"
+    },
+    {
+      "tag": "free",
+      "type": "vmess",
+      "server": "sg.grayap.biz.id",
+      "server_port": 443,
+      "uuid": "free",
+      "alter_id": 0,
+      "security": "auto",
+      "tls": {
+        "enabled": true,
+        "server_name": "",
+        "insecure": true
+      },
+      "transport": {
+        "type": "ws",
+        "path": "/vmess",
+        "headers": {
+          "Host": "sg.grayap.biz.id"
+        }
+      },
+      "multiplex": {
+        "enabled": false
+      }
+    },
+    {
+      "type": "selector",
+      "tag": "SING",
+      "outbounds": [
+        "free"
+      ],
+      "interrupt_exist_connections": true
+    }
+  ],
+  "route": {
+    "rules": [
+      {
+        "action": "sniff"
+      },
+      {
+        "type": "logical",
+        "mode": "or",
+        "rules": [
+          {
+            "port": 53
+          },
+          {
+            "protocol": "dns"
+          }
+        ],
+        "action": "hijack-dns"
+      },
+      {
+        "clash_mode": "Direct",
+        "outbound": "direct"
+      },
+      {
+        "ip_is_private": true,
+        "outbound": "direct"
+      }
+    ],
+    "final": "SING",
+    "find_process": false,
+    "auto_detect_interface": true,
+    "default_domain_resolver": "DNS-PROVIDER"
+  },
+  "experimental": {
+    "cache_file": {
+      "enabled": true,
+      "store_fakeip": false
+    },
+    "clash_api": {
+      "external_controller": "0.0.0.0:9090",
+      "external_ui": "dashboard",
+      "external_ui_download_url": "https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
+      "external_ui_download_detour": "SING",
+      "default_mode": "Rule"
+    }
+  }
+}
