@@ -1,0 +1,167 @@
+#jika config Wildcald anda tidak muncul, chat aja admin buat masukin Wildcald kalian. 
+hosts:
+  'bug': [ 104.18.3.2, 104.18.2.2 ]
+
+prof: &prof {type: http, size-limit: 15000, interval: 10800, health-check: {enable: true, url: http://connectivitycheck.gstatic.com/generate_204, interval: 3600}}
+      
+global-client-fingerprint: random
+log-level: silent
+routing-mark: 6666
+mode: rule
+port: 7890
+socks-port: 7891
+redir-port: 7892
+tproxy-port: 7893
+ipv6: true
+allow-lan: true
+unified-delay: true
+tcp-concurrent: true
+interface-name: en0
+profile:
+  store-selected: false
+  store-fake-ip: true
+geodata-mode: true
+sniffer:
+  enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
+  override-destination: false
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+  force-domain:
+    - +.v2ex.com
+    - +.google.com
+  skip-domain:
+    - bakrie.ac.id
+    - unnes.ac.id
+    - space.byu.id
+    - api.zoom.us
+    - quiz.vidio.com
+    - help.viu.com
+    - www.udemy.com
+    - ava.game.naver.com
+  skip-src-address:
+    - 192.168.0.3/32
+  skip-dst-address:
+    - 192.168.0.3/32
+dns:
+  enable: true
+  prefer-h3: true
+  use-hosts: true
+  use-system-hosts: true
+  respect-rules: true
+  listen: 0.0.0.0:53
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  nameserver:
+    - 'https://8.8.8.8#ecs=223.5.5.0/24&ecs-override=true'
+    - 'https://1.1.1.1#ecs=223.5.5.0/24&ecs-override=true'
+  fallback: [ 'system', 1.1.1.1, 1.0.0.1, 8.8.8.8, 8.8.4.4 ]
+  proxy-server-nameserver: [ 'system', 'https://mozilla.cloudflare-dns.com#DNS&h3=true', 'https://mozilla.cloudflare-dns.com#skip-cert-verify=true' ]
+proxy-groups:
+    - name: UMUM
+      proxies: [ AUTO ALL ]
+      include-all-providers: true
+      exclude-filter: UDP
+      type: select
+      lazy: true
+    - name: UDP
+      proxies: [ Server UDP, PASS ]
+      use: [ udp2 ]
+      type: select
+      lazy: true
+    - name: AUTO ALL
+      include-all-providers: true
+      exclude-filter: UDP
+      type: fallback
+      url: 'http://connectivitycheck.gstatic.com/generate_204'
+      interval: 300
+      lazy: true
+    - interval: 600
+      tolerance: 1000
+      name: Server UDP
+      use: [ udp2 ]
+      type: fallback
+      url: 'http://connectivitycheck.gstatic.com/generate_204'
+proxy-providers:
+  'ava':
+    url: >-
+      https://raw.githubusercontent.com/oranglemah97/umum/refs/heads/main/line.txt
+    path: ./ava
+    override: {skip-cert-verify: true, packet-encoding: xudp, network: tcp, smux: {enabled: true}, additional-prefix: 'ava '}
+    <<: *prof
+  'edu':
+    url: >-
+      https://raw.githubusercontent.com/oranglemah97/umum/refs/heads/main/edu.txt
+    path: ./edu
+    override: {skip-cert-verify: true, packet-encoding: xudp, network: tcp, smux: {enabled: true}, additional-prefix: 'edu '}
+    <<: *prof
+  'tiktok':
+    url: >-
+      https://raw.githubusercontent.com/taamarin/any-icon/main/uploads/dimas%20yml%20(1).txt
+    path: ./tiktok
+    override: {skip-cert-verify: true, packet-encoding: xudp, network: tcp, smux: {enabled: true}, additional-prefix: 'tiktok '}
+    <<: *prof
+  'udp2':
+    url: >-
+      https://raw.githubusercontent.com/oranglemah97/umum/refs/heads/main/udp.txt
+    path: ./UDP2
+    override: {skip-cert-verify: true, packet-encoding: xudp, network: tcp, smux: {enabled: true}, additional-prefix: 'UDP '}
+    <<: *prof
+rule-providers:
+  sosmed: 
+    type: http 
+    format: yaml 
+    behavior: domain 
+    url: "https://raw.githubusercontent.com/Zulfatok/Rule_provider/refs/heads/main/rule_provider/SANZ-SocialMedia.yaml" 
+    path: ./ruleset/sosialmed.yaml
+    interval: 86400
+  wa: 
+    type: http 
+    format: yaml 
+    behavior: domain 
+    url: "https://raw.githubusercontent.com/Zulfatok/Rule_provider/refs/heads/main/rule_provider/SANZ-WhatsApp.yaml" 
+    path: ./ruleset/wa.yaml
+    interval: 86400
+  youtube: 
+    type: http 
+    format: yaml 
+    behavior: domain 
+    url: "https://raw.githubusercontent.com/Zulfatok/Rule_provider/refs/heads/main/rule_provider/SANZ-Streaming.yaml" 
+    path: ./ruleset/youtube.yaml
+    interval: 86400
+  cloudflare: 
+    type: http 
+    format: yaml 
+    behavior: domain 
+    url: "https://raw.githubusercontent.com/Zulfatok/Rule_provider/refs/heads/main/rule_provider/SANZ-Cloudflare.yaml" 
+    path: ./ruleset/cloudflare.yaml
+    interval: 86400
+  speedtest: 
+    type: http 
+    format: yaml 
+    behavior: domain 
+    url: "https://raw.githubusercontent.com/Zulfatok/Rule_provider/refs/heads/main/rule_provider/SANZ-SpeedTest.yaml" 
+    path: ./ruleset/speedtest.yaml
+    interval: 86400
+
+rules:
+- RULE-SET,speedtest,AUTO ALL
+- RULE-SET,cloudflare,AUTO ALL
+- RULE-SET,sosmed,AUTO ALL
+- RULE-SET,youtube,AUTO ALL
+- RULE-SET,wa,AUTO ALL
+- IP-CIDR,127.0.0.0/8,DIRECT
+- IP-CIDR,122.122.0.0/8,DIRECT,no-resolve
+- NETWORK,UDP,UDP
+- DST-PORT,123/136/137-139,DIRECT 
+- SRC-PORT,123/136/137-139,DIRECT,udp
+- MATCH,UMUM
+- MATCH,UMUM
