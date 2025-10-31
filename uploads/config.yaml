@@ -1,0 +1,200 @@
+redir-port: 9797
+tproxy-port: 9898
+bind-address: "*"
+mode: rule
+allow-lan: true
+log-level: silent
+external-controller: 0.0.0.0:9090
+external-ui: ./dashboard
+unified-delay: true
+ipv6: false
+dns:
+  enable: true
+  ipv6: false
+  listen: 0.0.0.0:1053
+  enhanced-mode: redir-host
+  use-host: true
+  default-nameserver:
+    - '9.9.9.9#INJEK'
+    - '9.9.9.9#YOKOSO'
+    - '9.9.9.9#LB'
+  nameserver:
+    - '9.9.9.9#INJEK'
+    - '9.9.9.9#YOKOSO'
+    - '9.9.9.9#LB'
+  proxy-server-nameserver:
+    - 104.20.46.147 #IP VIDIO
+    - 172.66.144.39 #IP VIDIO
+    - 104.17.156.243 #IP VIDIO
+    - 104.17.157.243 #IP VIDIO
+    - 104.17.158.243 #IP VIDIO
+    - 104.17.159.243 #IP VIDIO
+    - 104.17.71.206 #IP VIDIO
+    - 104.17.72.206 #IP VIDIO
+    - 104.17.73.206 #IP VIDIO
+    - 104.17.74.206 #IP VIDIO
+    - 172.64.32.202 #IP VIDIO
+    - '192.168.156.30#DIRECT'
+    - '192.168.4.28#DIRECT'
+    - 112.215.203.246 #DNS XL
+    - 112.215.203.247 #DNS XL
+    - 112.215.203.248#DNS XL
+    - 112.215.203.254#DNS XL
+    - '112.215.198.248#DIRECT'
+    - '112.215.198.254#DIRECT'
+    - '[2400:9800:2:2::245]' #DNS XL
+    - '[2400:9800:2:2::246]' #DNS XL
+proxy-providers:
+  XLVIDIO:
+    type: file
+    path: "./vidio.yaml"
+    health-check:
+      enable: true
+      interval: 120
+      url: https://cp.cloudflare.com/generate_204
+  LBS:
+    type: file
+    path: "./p2.yaml"
+    health-check:
+      enable: true
+      interval: 120
+      url: https://cp.cloudflare.com/generate_204
+proxies:
+  - name: "$ID O Datacepat"
+    server: app.gopay.co.id
+    port: 443
+    type: vmess
+    uuid: 872ffe3c-2cb1-4c3f-8e26-803b8099a22d
+    alterId: 0
+    cipher: auto
+    servername: ckzk.xyz
+    skip-cert-verify: true
+    tls: true
+    udp: true
+    network: ws
+    ws-opts:
+      path: /robust-navigate-to-serverless-architecture/buy-vmess-ws-pm-telegram-at-synricha
+      headers:
+        Host: ckzk.xyz
+  - name: "$ID I Datacepat"
+    server: untar.ac.id
+    port: 80
+    type: vmess
+    uuid: 872ffe3c-2cb1-4c3f-8e26-803b8099a22d
+    alterId: 0
+    cipher: auto
+    servername: 
+    skip-cert-verify: true
+    udp: true
+    network: ws
+    ws-opts:
+      path: /robust-navigate-to-serverless-architecture/buy-vmess-ws-pm-telegram-at-synricha
+      headers:
+        Host: untar.ac.id.ckzk.xyz
+  - name: "$ID XLBIZ Datacepat"
+    server: ava.game.naver.com
+    port: 443
+    type: vmess
+    uuid: 872ffe3c-2cb1-4c3f-8e26-803b8099a22d
+    alterId: 0
+    cipher: auto
+    servername: ava.game.naver.com.ckzk.xyz
+    skip-cert-verify: true
+    tls: true
+    udp: true
+    network: ws
+    ws-opts:
+      path: /game-changing-deploy-to-api-design/buy-vmess-ws-pm-telegram-at-synricha
+      headers:
+        Host: ava.game.naver.com.ckzk.xyz
+  - name: "$ID XLBIZ Backup"
+    server: ava.game.naver.com
+    port: 443
+    type: vmess
+    uuid: 33446b5c-59cf-4d14-abda-4c3097bc1b5c
+    alterId: 0
+    cipher: auto
+    servername: ava.game.naver.com.sing-box.store
+    skip-cert-verify: true
+    tls: true
+    udp: true
+    network: ws
+    ws-opts:
+      path: /revolutionary-monetize-to-tech-trends/buy-vmess-ws-pm-telegram-at-synricha
+      headers:
+        Host: ava.game.naver.com.sing-box.store
+  - name: "$ID XLVID Datacepat"
+    server: 104.17.156.243
+    port: 443
+    type: vmess
+    uuid: 872ffe3c-2cb1-4c3f-8e26-803b8099a22d
+    alterId: 0
+    cipher: auto
+    servername: ckzk.xyz
+    skip-cert-verify: true
+    tls: true
+    udp: true
+    network: ws
+    ws-opts:
+      path: /game-changing-deploy-to-api-design/buy-vmess-ws-pm-telegram-at-synricha
+      headers:
+        Host: ckzk.xyz
+  - name: "$ID XLVID UDP"
+    type: vless
+    server: quiz.vidio.com
+    port: 80
+    udp: true
+    alpn:
+      - http/1.1
+    skip-cert-verify: true
+    client-fingerprint: randomized
+    uuid: 00000000-0000-0000-0000-000000000000
+    servername: id1.jeelsboobz.art
+    tls: false
+    packet-encoding: xudp
+    network: ws
+    ws-opts:
+      path: /qGZGAPo0xY5Jzv3tf0
+      headers:
+        Host: id1.jeelsboobz.art
+  - name: "$ID OB Datacepat"
+    server: space.byu.id
+    port: 443
+    type: vmess
+    uuid: 872ffe3c-2cb1-4c3f-8e26-803b8099a22d
+    alterId: 0
+    cipher: auto
+    servername: ckzk.xyz
+    skip-cert-verify: true
+    tls: true
+    udp: true
+    network: ws
+    ws-opts:
+      path: /robust-navigate-to-serverless-architecture/buy-vmess-ws-pm-telegram-at-synricha
+      headers:
+        Host: ckzk.xyz
+proxy-groups:
+  - name: LB
+    type: load-balance
+    strategy: consistent-hashing
+    disable-udp: false
+    url: http://www.gstatic.com/generate_204
+    use:
+      - LBS
+  - name: YOKOSO
+    type: select
+    use:
+      - XLVIDIO
+  - name: INJEK
+    type: select
+    proxies:
+      - $ID XLBIZ Datacepat
+      - $ID XLVID Datacepat
+      - $ID XLBIZ Backup
+      - $ID XLVID UDP
+      - $ID I Datacepat
+      - $ID O Datacepat
+      - $ID OB Datacepat
+      - REJECT
+rules:
+  - MATCH,GLOBAL
