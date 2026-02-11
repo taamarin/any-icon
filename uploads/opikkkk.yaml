@@ -1,0 +1,54 @@
+port: 7890
+socks-port: 7891
+redir-port: 7892
+mixed-port: 7893
+tproxy-port: 7895
+ipv6: false
+mode: rule
+log-level: silent
+allow-lan: true
+external-controller: 0.0.0.0:9090
+secret: ''
+bind-address: '*'
+unified-delay: true
+profile:
+  store-selected: true
+dns:
+  enable: true
+  ipv6: false
+  enhanced-mode: fake-ip
+  listen: 127.0.0.1:7874
+  nameserver:
+    - 1.1.1.1
+    - 1.0.0.1
+  fallback:
+    - https://cloudflare-dns.com/dns-query
+    - https://dns.google/dns-query
+  default-nameserver:
+    - 8.8.8.8
+    - 8.8.4.4
+proxies:
+  - name: xzosy-tls-conference-wildcard
+    server: 170.114.45.6
+    port: 443
+    type: vmess
+    uuid: 27d9a814-7eb5-49f6-9462-65069a68e1aa
+    alterId: 0
+    cipher: auto
+    tls: true
+    skip-cert-verify: true
+    servername: support.zoom.us.min.xhmt.my.id
+    network: ws
+    ws-opts:
+      path: /vmess
+      headers:
+        Host: support.zoom.us.min.xhmt.my.id
+    udp: true
+proxy-groups:
+  - name: XZOSY-TLS-CONFERENCE-WILDCARD
+    type: select
+    proxies:
+      - xzosy-tls-conference-wildcard
+      - DIRECT
+rules:
+  - MATCH,XZOSY-TLS-CONFERENCE-WILDCARD
