@@ -1,0 +1,8 @@
+# Please enter or replace with your configuration here,
+# 请在此输入或替换为你的配置,
+# Silahkan masukkan atau ganti dengan konfigurasi kamu di sini,
+
+external-controller: 0.0.0.0:9090
+external-ui: ./dashboard
+tproxy-port: 9898
+redir-port: 9797
